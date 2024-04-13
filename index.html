@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Container for the calculator -->
+    <div id="calculator-container">
+        <!-- Calculator heading and specifications -->
+        <div id="calculator-heading">
+            <h1 class="calculator-heading">Calculator</h1>
+            <p class="calculator-specs">This calculator allows you to perform basic arithmetic operations, including addition, subtraction, multiplication, and division. You can also calculate the square of a number by entering the number and clicking the "x²" button. Additionally, you can use the "%" button to perform modulo operation, which calculates the remainder of a division operation. Use the "DEL" button to delete the last digit entered and the "C" button to clear the display.</p>
+
+        </div>
+        <!-- Calculator itself -->
+        <div id="calculator">
+            <!-- Display for the calculator -->
+            <input id="display" readonly>
+            <!-- Buttons for arithmetic operations and functions -->
+            <div id="keys">
+                <button onclick="appendToDisplay('+')" class="operator-btn">+</button>
+                <button onclick="appendToDisplay('7')">7</button>
+                <button onclick="appendToDisplay('8')">8</button>
+                <button onclick="appendToDisplay('9')">9</button>
+                <button onclick="appendToDisplay('-')" class="operator-btn">-</button>
+                <button onclick="appendToDisplay('4')">4</button>
+                <button onclick="appendToDisplay('5')">5</button>
+                <button onclick="appendToDisplay('6')">6</button>
+                <button onclick="appendToDisplay('*')" class="operator-btn">*</button>
+                <button onclick="appendToDisplay('1')">1</button>
+                <button onclick="appendToDisplay('2')">2</button>
+                <button onclick="appendToDisplay('3')">3</button>
+                <button onclick="appendToDisplay('/')" class="operator-btn">/</button>
+                <button onclick="appendToDisplay('0')">0</button>
+                <button onclick="appendToDisplay('.')">.</button>
+                <button onclick="triggerModulo()">%</button> <!-- Trigger for the modulo operation -->
+                <button onclick="square()"class="operator-btn">x²</button>
+                <button onclick="calculate()" class="operator-btn">=</button>
+            </div>
+            <!-- Buttons for clearing the display and deleting digits -->
+            <div id="del">
+                <button onclick="deleteDigit()" class="del-btn">DEL</button>
+                <button onclick="clearDisplay()" class="del-btn">C</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript functions to handle calculator operations -->
+    <script>
+        var isModulo = false;
+        var firstInput = '';
+
+        // Function to append value to the display
+        function appendToDisplay(value) {
+            var display = document.getElementById('display');
+            display.value += value;
+        }
+
+        // Function to trigger the modulo operation
+        function triggerModulo() {
+            var display = document.getElementById('display');
+            firstInput = display.value; // Store the first input
+            display.value = ''; // Clear the display for the second input
+            isModulo = true; // Set flag to indicate modulo operation
+        }
+
+        // Function to calculate the result
+        function calculate() {
+            var display = document.getElementById('display');
+            var secondInput = parseFloat(display.value); // Get the second input
+
+            if (isModulo && !isNaN(secondInput)) { // Check if modulo operation is triggered and second input is valid
+                const a = parseFloat(firstInput);
+                const b = secondInput;
+                const result = ((a % b) + b) % b; // Calculate the result
+                display.value = result; // Display the result
+                isModulo = false; // Reset the flag
+            } else {
+                try {
+                    display.value = eval(display.value); // Perform other calculations if not in modulo operation
+                } catch (error) {
+                    display.value = "Error";
+                }
+            }
+        }
+
+        // Function to clear the display
+        function clearDisplay() {
+            var display = document.getElementById('display');
+            display.value = '';
+        }
+
+        // Function to square the displayed number
+        function square() {
+            var display = document.getElementById('display');
+            var currentValue = parseFloat(display.value);
+            var squaredValue = currentValue * currentValue;
+            display.value = squaredValue;
+        }
+
+        // Function to delete the last digit from the display
+        function deleteDigit() {
+            var display = document.getElementById('display');
+            display.value = display.value.slice(0, -1);
+        }
+    </script>
+</body>
+</html>
